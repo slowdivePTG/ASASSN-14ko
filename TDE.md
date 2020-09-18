@@ -54,7 +54,7 @@ To be continued...
   $$
   v_{orb}\sim\sqrt\frac{2GM_h}{r_T}\sim c\sqrt{\frac{r_g}{r_T}}
   $$
-  while the escape velocity
+  where $r_g$ is the Schwarzschild radius, while the escape velocity
   $$
   v_*\sim\sqrt{\frac{Gm_*}{r_*}}\sim\left(\frac{m_*}{M_h}\right)^{1/3}v_{orb}
   $$
@@ -64,6 +64,8 @@ To be continued...
   $$
   \Delta\Phi\sim -r_*\nabla_r\left(\frac{GM_h}{r}\right)_{r_T}=\frac{GM_h r_*}{r_T^2}=\frac{Gm_*}{r_*}\left(\frac{M_h}{m_*}\right)^{1/3}\sim v_{orb}v_*
   $$
+  Even though the mean specific binding energy of the debris to the hole would be positive, and comparable with the self-binding energy ($Gm_*/r_*$) of the original star (**an assumption**, with which the initial orbit is slightly elliptical), the spread about this mean is larger by $(M_h/ m_*)^{1/3}$.
+  
   In general, the original star moves in a parabolic, and thus zero-energy orbit. With this potential dispersion, however, part of the star is bound to the BH, while the other would be left unbound. For the outermost gas, **the specific orbital energy** is approximately
   $$
   -v_*^2+v_{orb}v_*=v_*(-v_*+v_{orb})=\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}-1\right]
@@ -72,4 +74,35 @@ To be continued...
   $$
   -v_*^2-v_{orb}v_*=-v_*(v_*+v_{orb})=-\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}+1\right]
   $$
-  
+
+## Fallback
+
+**The average specific binding energy** of debris bound to the BH is
+$$
+\sim\frac{1}{2}\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}+1\right]
+$$
+The bound orbits are close to parabolics, and are thus very eccentric. In a rough estimation, since
+$$
+E=-\frac{GM_hm_*}{2a}
+$$
+where $a$ is the semi-major axis, we have
+$$
+a\sim\left(\frac{M_h}{m_*}\right)^{2/3}r_*
+$$
+For a sun-type star, $a\sim10^3\ M_6^{-1/3}r_g$, where $M_6=M_h/(10^6 M_\odot)$.
+
+Now that $r_{min}=r_T$, 
+$$
+\left(\frac{M_h}{m_*}\right)^{2/3}r_*(1-e)=r_T=\left(\frac{M_h}{m_*}\right)^{1/3}r_*
+$$
+thus
+$$
+e=1-\left(\frac{M_h}{m_*}\right)^{-1/3}\sim1
+$$
+The orbital period is
+$$
+T_{debris}=\sqrt\frac{a^3}{GM_h}\sim\sqrt{\frac{M_Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\text{ yr}
+$$
+while the initial orbital period is $\sim 20\ M_6\text{ yr}$, a factor of $400\ M_6^{1/2}$ longer.
+
+This orbital period is much shorter compared to the estimated interval between each TDE ($\sim 10^{3-4}\text{ yr}$). Unless it takes many orbital periods to swallow the bound gas, the debris from each star would be digested separately.
