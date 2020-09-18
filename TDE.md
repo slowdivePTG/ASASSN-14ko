@@ -46,7 +46,7 @@ To be continued...
   $$
   The energy required to tear the star apart (that is, the star's self-binding energy $U$) is supplied at the expense of the orbital kinetic energy $K$.
 
-  Unless there were some explosive energy input, on average the debris would be bound to the hole, unless the star was initially on a hyperbolic orbit with asymptotic velocity over the escape velocity $v^*$ at the surface of the star, which is 1,000 km/s for solar-type stars.
+  Unless there were some explosive energy input, on average the debris would be bound to the hole, unless the star was initially on a hyperbolic orbit with asymptotic velocity over the escape velocity $v_*$ at the surface of the star, which is 1,000 km/s for solar-type stars.
 
   There are some other effects. The dominant effect is that while falling inwards towards the hole, the star would develop a **quadrupole distortion** which attains an amplitude of order unity by the time of disruption. Then the gravitational torque would spin it up and by the time it gets disrupted, it could be **spinning at close to its break-up angular velocity**.
 
@@ -66,10 +66,10 @@ To be continued...
   $$
   In general, the original star moves in a parabolic, and thus zero-energy orbit. With this potential dispersion, however, part of the star is bound to the BH, while the other would be left unbound. For the outermost gas, **the specific orbital energy** is approximately
   $$
-  (v_*+v_{orb})^2-v_{orb}^2+v_{orb}v_*=v_*(v_*+v_{orb})=\frac{Gm_*}{r_*}\left[1+\left(\frac{M_h}{m_*}\right)^{1/3}\right]
+  -v_*^2+v_{orb}v_*=v_*(-v_*+v_{orb})=\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}-1\right]
   $$
   for the innermost gas, this turns to
   $$
-  v_{orb}^2-(v_*-v_{orb})^2-v_{orb}v_*=v_*(v_*-v_{orb})=\frac{Gm_*}{r_*}\left[1-\left(\frac{M_h}{m_*}\right)^{1/3}\right]
+  -v_*^2-v_{orb}v_*=-v_*(v_*+v_{orb})=-\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}+1\right]
   $$
   
