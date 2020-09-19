@@ -74,6 +74,8 @@ To be continued...
   $$
   -v_*^2-v_{orb}v_*=-v_*(v_*+v_{orb})=-\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}+1\right]
   $$
+  
+  Here, $-v_*^2$ accounts for the energy loss in the distruption of the star.
 
 ## Fallback
 
@@ -85,24 +87,22 @@ The bound orbits are close to parabolics, and are thus very eccentric. In a roug
 $$
 E=-\frac{GM_hm_*}{2a}
 $$
-where $a$ is the semi-major axis, we have
+where $a$ is the semi-major axis, so for the most tightly bound debris, we have
 $$
 a\sim\left(\frac{M_h}{m_*}\right)^{2/3}r_*
 $$
 For a sun-type star, $a\sim10^3\ M_6^{-1/3}r_g$, where $M_6=M_h/(10^6 M_\odot)$.
 
-Now that $r_{min}=r_T$, 
-$$
-\left(\frac{M_h}{m_*}\right)^{2/3}r_*(1-e)=r_T=\left(\frac{M_h}{m_*}\right)^{1/3}r_*
-$$
-thus
-$$
-e=1-\left(\frac{M_h}{m_*}\right)^{-1/3}\sim1
-$$
 The orbital period is
 $$
-T_{debris}=\sqrt\frac{a^3}{GM_h}\sim\sqrt{\frac{M_Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\text{ yr}
+T_{t}=\sqrt\frac{a^3}{GM_h}\sim\sqrt{\frac{M_Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\left(\frac{m_*}{M_\odot}\right)^{-1}\left(\frac{R_*}{R_\odot}\right)^{3/2}\text{ yr}
 $$
-while the initial orbital period is $\sim 20\ M_6\text{ yr}$, a factor of $400\ M_6^{1/2}$ longer.
+while the initial orbital period is $\sim 20\ M_6\text{ yr}$, a factor of $400\ M_6^{1/2}$ longer for a solar-type star.
 
 This orbital period is much shorter compared to the estimated interval between each TDE ($\sim 10^{3-4}\text{ yr}$). Unless it takes many orbital periods to swallow the bound gas, the debris from each star would be digested separately.
+
+In order to form an accretion flow, the bound stellar debris must lose a significant amount of energy by viscous dissipation. If the viscosity is large enough to allow accretion onto the SMBH on a timescale shorter than $T_t$, the luminosity of the flare is expected to follow the rate of mass fallback
+$$
+\dot M=\frac{\text dM}{\text de}\frac{\text de}{\text da}\frac{\text da}{\text dT}\sim\frac{GM_h}{a^2}\cdot \frac{a}{T}\frac{\text dM}{\text de}\sim\frac{\text dM}{\text de}\left(GM_h\right)^{2/3}T^{-5/3}
+$$
+by assuming $\text dM/\text de\sim m_*/e_t$ is almost a constant (here $e$ refers to the specific energy).
