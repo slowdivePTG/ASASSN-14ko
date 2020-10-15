@@ -1,0 +1,15 @@
+#!/bin/bash
+#SBATCH --job-name=test_TDE
+#SBATCH --nodes=10
+#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-core=1
+#SBATCH --mem-per-cpu=2900
+#SBATCH --time=10-00:00:00
+#SBATCH -p dark
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=ptg.cliu@pku.edu.cn
+
+module purge
+module load intel/15.0.1  intelmpi/5.0.2.044
+
+srun ./flash4
