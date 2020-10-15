@@ -28,10 +28,10 @@ wall_clock_checkpoint      = 1e10    # won't output a wall clock checkpoint
 # Box dimensions. Object being disrupted is placed at exact center of box.
 xmax = 4.961540e+13  # 1000 rstar
 ymax = 4.961540e+13  # 1000 rstar
-zmax = 2.480770e+13  # 1000 rstar
+zmax = 2.480770e+13  # 500 rstar
 sim_xCenter = 2.480770e+13  # 500 rstar
 sim_yCenter = 2.480770e+13  # 500 rstar
-sim_zCenter = 1.240385e+13  # 500 rstar
+sim_zCenter = 1.240385e+13  # 250 rstar
 
 # Grid variable lower limits. Should each be at least a couple
 # orders of magnitude less than typical simulation values.
@@ -60,7 +60,7 @@ sim_starPtMass = 1.0e0
 
 # Parent parameters
 sim_parentMass = 0.d0
-sim_parentPeri = 1.49597871e13
+sim_parentPeri = 6.72117767e+09
 
 # Initial orbit.
 sim_periBeta  = 0.6
@@ -165,7 +165,7 @@ refineOnJeansLength = .false.
 refineOnSinkParticles = .false.
 sink_density_thresh = 1.e30
 sink_accretion_radius = 0.e0
-sink_softening_radius = 2.44e12
+sink_softening_radius = 3.36058884e+09 # ~1/2 rp
 sink_advanceserialcomputation = .false.
 sink_subdt_factor = 1.e-3
 sink_integrator = "leapfrog_cosmo"
