@@ -1,4 +1,4 @@
-# Tidal Disruption Event (TDE)
+## Tidal Disruption Event (TDE)
 
 > The gravity of the black hole (BH) introduces strong tidal forces that can deform, mangle, and potentially destroy objects that approach it too closely.
 >
