@@ -24,3 +24,4 @@ The orbital period is about 100 days. The idea will that this star was in an ecc
    >https://github.com/jamielaw-smith/FLASH-mentoring-instructions is a catch-all, copy and paste of misc instructions
 
 3. [MESA tutorial](http://mesa.sourceforge.net/index.html)
+
