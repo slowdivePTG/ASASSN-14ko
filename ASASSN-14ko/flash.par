@@ -6,9 +6,9 @@
 # tdyn = 434
 
 # Polytrope only (not MESA)
-sim_objPolyN  = 3.
-sim_objMass = 1.9891e33
-sim_objCentDens = 76.45 #8.45
+# sim_objPolyN  = 3.
+# sim_objMass = 1.9891e33
+# sim_objCentDens = 76.45 #8.45
 
 # Are we restarting a run? Uncomment the following lines and select the
 # last written checkpoint file number.
