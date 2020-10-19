@@ -12,7 +12,7 @@
 
 # Are we restarting a run? Uncomment the following lines and select the
 # last written checkpoint file number.
-$restart                    = .true.
+#restart                    = .true.
 #checkpointFileNumber       = 81
 #plotFileNumber             = 0
 #sim_maxrefine              = 14
