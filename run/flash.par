@@ -19,9 +19,9 @@
 
 # Output options (plot files and checkpoint files).
 basenm                     = "multitidal_"
-checkpointFileIntervalTime = 434.   # 1 tdyn
+checkpointFileIntervalTime = 1.072601e+03   # 1 tdyn
 #checkpointFileIntervalStep = 10
-plotFileIntervalTime       = 1e10
+plotFileIntervalTime       = 1.072601e+03   # 1 tdyn
 particlefileintervaltime   = 0.
 wall_clock_checkpoint      = 1e10    # won't output a wall clock checkpoint
 
@@ -60,12 +60,12 @@ sim_starPtMass = 1.0e0
 
 # Parent parameters
 sim_parentMass = 0.d0
-sim_parentPeri = 6.72117767e+09
+sim_parentPeri = 8.90776162e+12
 
 # Initial orbit.
 sim_periBeta  = 0.6
 sim_startBeta = 0.1
-sim_orbEcc    = 0.99999
+sim_orbEcc    = 9.86746725e-01
 sim_moveFixedToCOM = .true.
 
 # Zero out acceleration about one of the particles (1: resolved object, 2+: one of the pt. masses)
@@ -165,7 +165,7 @@ refineOnJeansLength = .false.
 refineOnSinkParticles = .false.
 sink_density_thresh = 1.e30
 sink_accretion_radius = 0.e0
-sink_softening_radius = 3.36058884e+09 # ~1/2 rp
+sink_softening_radius = 4.45388081e+12 # ~1/2 rp
 sink_advanceserialcomputation = .false.
 sink_subdt_factor = 1.e-3
 sink_integrator = "leapfrog_cosmo"
