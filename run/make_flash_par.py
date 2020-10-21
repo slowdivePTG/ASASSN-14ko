@@ -21,26 +21,25 @@ def make_flash_par(num):
 
     with open('./flash.par', 'r') as f:
         lines = f.readlines()
-        lines[3] = '# M = {:.4f} msun\n'.format(float(h.star_mass))
-        lines[4] = '# R = {:.4f} rsun\n'.format(float(h.photosphere_r))
-        lines[5] = '# tdyn = {:.4e} s\n'.format(float(tdyn))
+        lines[4] = '# M = {:.4f} msun\n'.format(float(h.star_mass))
+        lines[5] = '# R = {:.4f} rsun\n'.format(float(h.photosphere_r))
+        lines[6] = '# tdyn = {:.4e} s\n'.format(float(tdyn))
 
+        lines[17] = 'checkpointFileIntervalTime = {:.2f}   # 1 tdyn\n'.format(float(tdyn))
+        lines[19] = 'plotFileIntervalTime       = {:.2f}   # 1 tdyn\n'.format(float(tdyn))
 
-        lines[28] = 'xmax = {:.6e}  # 1000 rstar\n'.format(float(R) * 1000)
-        lines[29] = 'ymax = {:.6e}  # 1000 rstar\n'.format(float(R) * 1000)
-        lines[30] = 'zmax = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
-        lines[31] = 'sim_xCenter = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
-        lines[32] = 'sim_yCenter = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
-        lines[33] = 'sim_zCenter = {:.6e}  # 250 rstar\n'.format(float(R) * 250)
+        lines[24] = 'xmax = {:.6e}  # 1000 rstar\n'.format(float(R) * 1000)
+        lines[25] = 'ymax = {:.6e}  # 1000 rstar\n'.format(float(R) * 1000)
+        lines[36] = 'zmax = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
+        lines[28] = 'sim_xCenter = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
+        lines[29] = 'sim_yCenter = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
+        lines[30] = 'sim_zCenter = {:.6e}  # 250 rstar\n'.format(float(R) * 250)
 
-        lines[21] = 'checkpointFileIntervalTime = {:.6e}   # 1 tdyn\n'.format(float(tdyn))
-        lines[23] = 'plotFileIntervalTime       = {:.6e}   # 1 tdyn\n'.format(float(tdyn))
-        lines[48] = 'tmax = {:.6e}   # 100 tdyn\n'.format(float(tdyn) * 100)
-        lines[78] = 'sim_tRelax = {:.6e}   # 5 tdyn\n'.format(float(tdyn) * 5)
+        lines[45] = 'tmax = {:.2f}   # 100 tdyn\n'.format(float(tdyn) * 100)
+        lines[80] = 'sim_tRelax = {:.2f}   # 5 tdyn\n'.format(float(tdyn) * 5)
 
-        lines[62] = 'sim_parentPeri = {:.8e}\n'.format(float(r_peri))
-        lines[67] = 'sim_orbEcc    = {:.8e}\n'.format(float(e))
-        lines[167] = 'sink_softening_radius = {:.8e} # ~1/2 rp\n'.format(float(r_peri)/2)
+        lines[68] = 'sim_orbEcc    = {:.6f}\n'.format(float(e))
+        lines[170] = 'sink_softening_radius = {:.8e} # ~1/2 rp\n'.format(float(r_peri)/2)
 
     with open('./flash.par', 'w') as f:
         for l in lines:

@@ -1,14 +1,10 @@
 # Sets variables that don't require a recompile.
+
 # USER PARAMETERS
 # These parameters typically vary from run to run.
 # M = 0.8000 msun
 # R = 0.7134 rsun
 # tdyn = 1.0726e+03 s
-
-# Polytrope only (not MESA)
-# sim_objPolyN  = 3.
-# sim_objMass = 1.9891e33
-# sim_objCentDens = 76.45 #8.45
 
 # Are we restarting a run? Uncomment the following lines and select the
 # last written checkpoint file number.
@@ -19,9 +15,9 @@
 
 # Output options (plot files and checkpoint files).
 basenm                     = "multitidal_"
-checkpointFileIntervalTime = 1.072601e+03   # 1 tdyn
+checkpointFileIntervalTime = 1072.60   # 1 tdyn
 #checkpointFileIntervalStep = 10
-plotFileIntervalTime       = 1.072601e+03   # 1 tdyn
+plotFileIntervalTime       = 1072.60   # 1 tdyn
 particlefileintervaltime   = 0.
 wall_clock_checkpoint      = 1e10    # won't output a wall clock checkpoint
 
@@ -29,6 +25,7 @@ wall_clock_checkpoint      = 1e10    # won't output a wall clock checkpoint
 xmax = 4.961540e+13  # 1000 rstar
 ymax = 4.961540e+13  # 1000 rstar
 zmax = 2.480770e+13  # 500 rstar
+
 sim_xCenter = 2.480770e+13  # 500 rstar
 sim_yCenter = 2.480770e+13  # 500 rstar
 sim_zCenter = 1.240385e+13  # 250 rstar
@@ -46,12 +43,16 @@ sim_pAmbient   = 1.0e1
 sim_tAmbient   = 1.0e3
 
 # Maximum time to run simulation.
-tmax = 1.072601e+05   # 100 tdyn
+tmax = 107260.11   # 100 tdyn
+
 useCool = .false.
+
 refinement_type = "rel_to_max"
 sim_kind = "polytrope"
 sim_gravityType = "newton"
+
 sim_condCoeff = 0.0
+
 coolDtFactor = 1.d5
 
 # Massive perturber parameters.
@@ -60,12 +61,13 @@ sim_starPtMass = 1.0e0
 
 # Parent parameters
 sim_parentMass = 0.d0
-sim_parentPeri = 8.90776162e+12
+sim_parentPeri = 1.e13
 
 # Initial orbit.
 sim_periBeta  = 0.6
 sim_startBeta = 0.1
-sim_orbEcc    = 9.86746725e-01
+sim_orbEcc    = 0.986747
+
 sim_moveFixedToCOM = .true.
 
 # Zero out acceleration about one of the particles (1: resolved object, 2+: one of the pt. masses)
@@ -76,7 +78,7 @@ sim_useRadialProfile = .false.
 sim_xRayFraction = 0.0
 
 # Parameters of initial relaxation of object to grid.
-sim_tRelax = 5.363006e+03   # 5 tdyn
+sim_tRelax = 5363.01   # 5 tdyn
 sim_relaxRate = 0.9
 sim_tSpinup   = 0.0e4
 sim_rotFac    = 0.0
@@ -109,7 +111,7 @@ eos_maxnewton = 10000
 
 # tolerance on the convergence in the rootfind
 eos_tolerance = 1.0e-6
-sim_maxBlocks = 300000
+sim_maxBlocks = 600000
 
 # Variables to include in plot files.
 plot_var_1 = "dens"
@@ -159,6 +161,7 @@ dr_shortenLastStepBeforeTMax = .true.
 #diff_eleZlBoundaryType = "outflow"
 #diff_eleZrBoundaryType = "outflow"
 #diffusion_cutoff_density = 1.e0
+
 useSinkParticles = .true.
 keepLostParticles = .true.
 refineOnJeansLength = .false.
@@ -170,11 +173,14 @@ sink_advanceserialcomputation = .false.
 sink_subdt_factor = 1.e-3
 sink_integrator = "leapfrog_cosmo"
 sink_offDomainSupport = .true.
+
 az_initial = 1.0e-1
 r_fieldloop = 6.0e10
 UnitSystem = "cgs"
+
 geometry    = "cartesian"
 convertToConsvdInMeshInterp = .true.
+
 gr_sanitizeverbosity = 0
 gr_sanitizedatamode = 0
 gr_restrictallmethod = 2
@@ -222,5 +228,6 @@ shockDetect = .true.     # Shock Detect for numerical stability
 #   V.  Magnetic Resistivity
 useMagneticResistivity  = .false.
 resistivity             = 1.0E-4
+
 # 0 is no correction. 1 is full correction
 eos_coulombmult = 0.0E0
