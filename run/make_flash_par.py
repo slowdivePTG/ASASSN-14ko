@@ -10,7 +10,7 @@ def make_flash_par(num):
     tdyn = np.sqrt(R**3 / gravitational_constant / M).in_cgs()
     Trelax = tdyn * 5
     Tsim = tdyn * 100
-    Mbh = 1e6 * Msun
+    Mbh = 7e7 * Msun
     P = 110 * day
     a = ((gravitational_constant * Mbh / 4 / np.pi**2) * P**2)**(1 / 3)
     rT = (R * (Mbh / M)**(1 / 3)).in_cgs()
@@ -30,7 +30,7 @@ def make_flash_par(num):
 
         lines[24] = 'xmax = {:.6e}  # 1000 rstar\n'.format(float(R) * 1000)
         lines[25] = 'ymax = {:.6e}  # 1000 rstar\n'.format(float(R) * 1000)
-        lines[36] = 'zmax = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
+        lines[26] = 'zmax = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
         lines[28] = 'sim_xCenter = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
         lines[29] = 'sim_yCenter = {:.6e}  # 500 rstar\n'.format(float(R) * 500)
         lines[30] = 'sim_zCenter = {:.6e}  # 250 rstar\n'.format(float(R) * 250)
