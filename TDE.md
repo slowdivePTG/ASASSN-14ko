@@ -1,4 +1,4 @@
-## Tidal Disruption Event (TDE)
+# Tidal Disruption Event (TDE)
 
 > The gravity of the black hole (BH) introduces strong tidal forces that can deform, mangle, and potentially destroy objects that approach it too closely.
 >
@@ -20,15 +20,15 @@ To be continued...
 
 ## Crossing the Tidal Radius
 
-- Tidal Radius $r_T$
+- Tidal Radius $r_\text T$
 
-  Essentially, $r_T$ is the distance from the hole at which $M_h/ r^3$ equals the mean internal density of the passing star. Here $M_h$ is the mass of the BH.
+  Essentially, $r_\text T$ is the distance from the hole at which $M_\text H/ r^3$ equals the mean internal density of the passing star. Here $M_\text H$ is the mass of the BH.
   $$
-  r_T=r_*\left(\frac{M_h}{M_*}\right)^{1/3}
+  r_\text T=r_*\left(\frac{M_\text H}{M_*}\right)^{1/3}
   $$
-  In order of magnitude, $r_T$ is the same as the Roche radius: the latter is however only applicable to a star in a circular orbit with synchronized spin.
+  In order of magnitude, $r_\text T$ is the same as the Roche radius: the latter is however only applicable to a star in a circular orbit with synchronized spin.
 
-  When a star reaches the tidal radius of a BH, chances are that it could either lose its outer layers or suffers from complete disruption. Even if a solar-type star loses no material during each pericentric passage, it could get so distorted that the subsequent internal dissipation might exceed its incoming kinetic energy. Thus the star is captured by the BH.
+  When a star reaches the tidal radius of a BH, it could either lose its outer layers or suffers from complete disruption. Even if a solar-type star loses no material during each pericentric passage, it could get so distorted that the subsequent internal dissipation might exceed its incoming kinetic energy. Thus the star is captured by the BH.
 
 - The destruction of a star
 
@@ -36,13 +36,13 @@ To be continued...
   $$
   U=\frac{3Gm_*^2}{5r_*}
   $$
-  For a sun-type star at $r_T$ of a SMBH in a parabolic orbit, the kinetic energy is
+  For a sun-type star at $r_\text T$ of a SMBH in a parabolic orbit, the kinetic energy is
   $$
-  K=\frac{GM_hm_*}{r_T}
+  K=\frac{GM_\text Hm_*}{r_\text T}
   $$
   So
   $$
-  \frac{K}{U}\sim \frac{r_*}{r_T}\frac{M_h}{m_*}=\left(\frac{M_h}{m_*}\right)^{2/3}\gg 1
+  \frac{K}{U}\sim \frac{r_*}{r_\text T}\frac{M_\text H}{m_*}=\left(\frac{M_\text H}{m_*}\right)^{2/3}\gg 1
   $$
   The energy required to tear the star apart (that is, the star's self-binding energy $U$) is supplied at the expense of the orbital kinetic energy $K$.
 
@@ -50,29 +50,29 @@ To be continued...
 
   There are some other effects. The dominant effect is that while falling inwards towards the hole, the star would develop a **quadrupole distortion** which attains an amplitude of order unity by the time of disruption. Then the gravitational torque would spin it up and by the time it gets disrupted, it could be **spinning at close to its break-up angular velocity**.
 
-  At $r_T$, the orbital velocity is approximately
+  At $r_\text T$, the orbital velocity is approximately
   $$
-  v_{orb}\sim\sqrt\frac{2GM_h}{r_T}\sim c\sqrt{\frac{r_g}{r_T}}
+  v_{orb}\sim\sqrt\frac{2GM_\text H}{r_\text T}\sim c\sqrt{\frac{r_g}{r_\text T}}
   $$
   where $r_g$ is the Schwarzschild radius, while the escape velocity
   $$
-  v_*\sim\sqrt{\frac{Gm_*}{r_*}}\sim\left(\frac{m_*}{M_h}\right)^{1/3}v_{orb}
+  v_*\sim\sqrt{\frac{Gm_*}{r_*}}\sim\left(\frac{m_*}{M_\text H}\right)^{1/3}v_{orb}
   $$
-   In this way, the gas on the 'outer track' furthest from the BH moves $\sim\left({m_*}/{M_h}\right)^{1/3}v_{orb}$ faster than the 'inside track'.
+  In this way, the gas on the 'outer track' furthest from the BH moves $\sim\left({m_*}/{M_\text H}\right)^{1/3}v_{orb}$ faster than the 'inside track'.
 
   Morever, the slower-moving 'inside track' lies deeper in the BH's potential by an amount
   $$
-  \Delta\Phi\sim -r_*\nabla_r\left(\frac{GM_h}{r}\right)_{r_T}=\frac{GM_h r_*}{r_T^2}=\frac{Gm_*}{r_*}\left(\frac{M_h}{m_*}\right)^{1/3}\sim v_{orb}v_*
+  \Delta\Phi\sim -r_*\nabla_r\left(\frac{GM_\text H}{r}\right)_{r_\text T}=\frac{GM_\text H r_*}{r_\text T^2}=\frac{Gm_*}{r_*}\left(\frac{M_\text H}{m_*}\right)^{1/3}\sim v_{orb}v_*
   $$
-  Even though the mean specific binding energy of the debris to the hole would be positive, and comparable with the self-binding energy ($Gm_*/r_*$) of the original star (**an assumption**, with which the initial orbit is slightly elliptical), the spread about this mean is larger by $(M_h/ m_*)^{1/3}$.
+  Even though the mean specific binding energy of the debris to the hole would be positive, and comparable with the self-binding energy ($Gm_*/r_*$) of the original star (**an assumption**, with which the initial orbit is slightly elliptical), the spread about this mean is larger by $(M_\text H/ m_*)^{1/3}$.
   
   In general, the original star moves in a parabolic, and thus zero-energy orbit. With this potential dispersion, however, part of the star is bound to the BH, while the other would be left unbound. For the outermost gas, **the specific orbital energy** is approximately
   $$
-  -v_*^2+v_{orb}v_*=v_*(-v_*+v_{orb})=\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}-1\right]
+  -v_*^2+v_{orb}v_*=v_*(-v_*+v_{orb})=\frac{Gm_*}{r_*}\left[\left(\frac{M_\text H}{m_*}\right)^{1/3}-1\right]
   $$
   for the innermost gas, this turns to
   $$
-  -v_*^2-v_{orb}v_*=-v_*(v_*+v_{orb})=-\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}+1\right]
+  -v_*^2-v_{orb}v_*=-v_*(v_*+v_{orb})=-\frac{Gm_*}{r_*}\left[\left(\frac{M_\text H}{m_*}\right)^{1/3}+1\right]
   $$
   
   Here, $-v_*^2$ accounts for the energy loss in the distruption of the star.
@@ -81,21 +81,21 @@ To be continued...
 
 **The average specific binding energy** of debris bound to the BH is
 $$
-\sim\frac{1}{2}\frac{Gm_*}{r_*}\left[\left(\frac{M_h}{m_*}\right)^{1/3}+1\right]
+\sim\frac{1}{2}\frac{Gm_*}{r_*}\left[\left(\frac{M_\text H}{m_*}\right)^{1/3}+1\right]
 $$
 The bound orbits are close to parabolics, and are thus very eccentric. In a rough estimation, since
 $$
-E=-\frac{GM_hm_*}{2a}
+E=-\frac{GM_\text Hm_*}{2a}
 $$
 where $a$ is the semi-major axis, so for the most tightly bound debris, we have
 $$
-a\sim\left(\frac{M_h}{m_*}\right)^{2/3}r_*
+a\sim\left(\frac{M_\text H}{m_*}\right)^{2/3}r_*
 $$
-For a sun-type star, $a\sim10^3\ M_6^{-1/3}r_g$, where $M_6=M_h/(10^6 M_\odot)$.
+For a sun-type star, $a\sim10^3\ M_6^{-1/3}r_g$, where $M_6=M_\text H/(10^6 M_\odot)$.
 
 The orbital period is
 $$
-T_{t}=\sqrt\frac{a^3}{GM_h}\sim\sqrt{\frac{M_Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\left(\frac{m_*}{M_\odot}\right)^{-1}\left(\frac{R_*}{R_\odot}\right)^{3/2}\text{ yr}
+T_{t}=\sqrt\frac{a^3}{GM_\text H}\sim\sqrt{\frac{M_\text Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\left(\frac{m_*}{M_\odot}\right)^{-1}\left(\frac{R_*}{R_\odot}\right)^{3/2}\text{ yr}
 $$
 while the initial orbital period is $\sim 20\ M_6\text{ yr}$, a factor of $400\ M_6^{1/2}$ longer for a solar-type star.
 
@@ -103,6 +103,39 @@ This orbital period is much shorter compared to the estimated interval between e
 
 In order to form an accretion flow, the bound stellar debris must lose a significant amount of energy by viscous dissipation. If the viscosity is large enough to allow accretion onto the SMBH on a timescale shorter than $T_t$, the luminosity of the flare is expected to follow the rate of mass fallback
 $$
-\dot M=\frac{\text dM}{\text de}\frac{\text de}{\text da}\frac{\text da}{\text dT}\sim\frac{GM_h}{a^2}\cdot \frac{a}{T}\frac{\text dM}{\text de}\sim\frac{\text dM}{\text de}\left(GM_h\right)^{2/3}T^{-5/3}
+\dot M=\frac{\text dM}{\text de}\frac{\text de}{\text da}\frac{\text da}{\text dT}\sim\frac{GM_\text H}{a^2}\cdot \frac{a}{T}\frac{\text dM}{\text de}\sim\frac{\text dM}{\text de}\left(GM_\text H\right)^{2/3}T^{-5/3}
 $$
 by assuming $\text dM/\text de\sim m_*/e_t$ is almost a constant (here $e$ refers to the specific energy).
+
+
+
+## How Many Parameters Do We Need
+
+Ignoring general relativistic effects and stellar rotation, and assuming stars to be polytropes, it may seem that a complete study of tidal disruptions would require an exhaustive study of the various combinations of six parameters: $M_∗$, $R_∗$, $M_\text h$, the orbital eccentricity $e$, the polytropic index $\gamma$, and $\beta\equiv  r_\text T/r_\text p$.
+
+With $M_*$ and $\gamma$, we can without too much effort derive $R_*$.
+
+We define a crossing timescale $t_\text p\equiv {r_\text p}/{v_\text{p}}$, where $\text p$ denotes for the pericenter. It reflects how long the encounter is. Since most of the stars that are scattered into disruptive orbits originate from the sphere of influence or beyond, $e\sim1$, thus the orbit is nearly parabolic. Fix $\beta$ and $M_*$, the definition of $\beta$ directly gives
+$$
+r_\text p=\frac{r_\text T}{\beta}=\frac1\beta R_*\left(\frac{M_\text H}{M_*}\right)^{1/3}\propto M_\text H^{1/3}
+$$
+
+And for a nearly parabolic orbit,
+$$
+v_\text p=\sqrt{\frac{2GM_\text H}{r_\text p}}\propto M_\text H^{1/3}
+$$
+As a result, $t_\text p$ is independent of $M_\text H$ for fixed $\beta$ and $M_*$.
+
+How the encounter influence the star depends on the ratio of $t_\text p$ and the star's dynamic timescale
+$$
+t_\text{dyn}=\sqrt{\frac{R_*^3}{GM_*}}
+$$
+Surprisingly,
+$$
+\frac{t_\text p}{t_\text{dyn}}=\sqrt{\frac{r_\text p^3}{2GM_\text H}}\cdot\sqrt{\frac{GM_*}{R_*^3}}=\sqrt{\frac{\beta^3}{2}}
+$$
+is even independent of the stellar mass and radius.
+
+Additionally, as the mass ratio approaches infinity, the asymmetry of the tidal field becomes progressively less important as $R_∗ \ll r_\text T$, with the difference in the strength of the tidal field at pericenter between the near side and the far side for a $10^6:1$ encounter being $\simeq3\%$ (Guillochon et al. 2011).
+
+With all these facts above, it is claimed that the vast majority of stellar disruptions by SMBHs can be described by just two parameters: $\beta$ and $\gamma$.
