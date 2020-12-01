@@ -10,6 +10,7 @@ class SinkEvol:
     def __init__(self, DIR, runs, force, clean):
         self.user = DIR
         self.runs = runs
+        self.Tdyn = 0
 
         import paramiko
         dirs = os.listdir('../../TDE_plot/')
@@ -24,13 +25,12 @@ class SinkEvol:
 
         exist = False
         for i in dirs:
-            temp = '{}_flash.par'.format(runs)
+            temp = '{}_extras.dat'.format(runs)
             if temp in i:
                 exist = True
                 break
 
         if not exist or force:
-
             hostname = "fend02.hpc.ku.dk"
             port = 22
             username = "ptgcliu"
@@ -40,34 +40,48 @@ class SinkEvol:
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             client.connect(hostname, port, username, password, compress=True)
             sftp_client = client.open_sftp()
-            sftp_client.get(
-                '/storage/dark/ptgcliu/{}/flash.par'.format(self.runs), '../../TDE_plot/{}_flash.par'.format(runs))
+            try:
+                sftp_client.get(
+                    '/storage/dark/{}/{}/extras.dat'.format(self.user, self.runs), '../../TDE_plot/{}_extras.dat'.format(runs))
+            except FileNotFoundError:
+                print('{} not found!'.format(
+                    '/storage/dark/{}/{}/extras.dat'.format(self.user, self.runs)))
+                os.system('rm ../../TDE_plot/{}_extras.dat'.format(runs))
 
             file_cluster = '/storage/dark/{}/{}/sinks_evol.dat'.format(
                 DIR, self.runs)
             # print(file_cluster)
-            sftp_client.get(file_cluster, filename)
+            try:
+                sftp_client.get(file_cluster, filename)
+            except FileNotFoundError:
+                print('{} not found!'.format(file_cluster))
+                return
             df = pd.read_table(filename, delim_whitespace=True)
+            # search for headers printed again in a restart
             args = df[df['[01]time'] == '[01]time'].index
-            cut = 0
+
+            # stop when no header's left
             while len(args) != 0:
-                sub = df['[01]time'][args[-1] + 1]
+                # the last restart
+                restart_time = df['[01]time'][args[-1] + 1]
                 df_before = df[df.index < args[-1]]
-                arg_temp = df_before[df_before['[01]time'] == sub].index
+                # check if the restart time occured before
+                arg_temp = df_before[df_before['[01]time']
+                                     == restart_time].index
+
+                # remove all data between two same restart time
                 if len(arg_temp) > 0:
                     remove = range(arg_temp[0], args[-1] + 1)
+                # otherwise remove only the header
                 else:
                     remove = [args[-1]]
                 df = df.drop(remove)
                 args = df[df['[01]time'] == '[01]time'].index
-            df = df[cut:]
-            df = df[df['[01]time'] != '[01]time']
             df.to_csv(self.output,
                       sep=' ',
                       index=False,
                       header=True)
-        else:
-            df = pd.read_table(self.output, delim_whitespace=True)
+        df = pd.read_table(self.output, delim_whitespace=True)
 
         self.star = df[1::2]
         self.bh = df[0::2]
@@ -75,18 +89,13 @@ class SinkEvol:
         os.system('rm ../../TDE_plot/sinks_evol.dat')
         self.runs = runs
 
-        with open('../../TDE_plot/{}_flash.par'.format(runs)) as f:
-            while True:
-                l = f.readline()
-                if 'tdyn' in l:
-                    cut = l.find('tdyn = ') + len('tdyn = ')
-                    try:
-                        self.tdyn = eval(l[cut:])
-                    except:
-                        s = l.find(' s')
-                        self.tdyn = eval(l[cut:s])
-                    print('Tdyn = {} s'.format(self.tdyn))
-                    break
+        extras = np.loadtxt('../../TDE_plot/{}_extras.dat'.format(runs))
+        self.rs = extras[3] * u.cm
+        self.ms = extras[4] * u.g
+        G = u.gravitational_constant
+        rho = self.ms / (self.rs**3)
+        self.tdyn = 1 / np.sqrt(G * rho)
+        print('Tdyn = {:.2f} s'.format(self.tdyn))
 
     def orbit(self):
         plt.figure(figsize=(12, 8))
@@ -99,13 +108,14 @@ class SinkEvol:
             s=self.star['[01]time'][::200]**2 * 1e-7)
         ntdyn = 1
         arg = np.array([], dtype='i4')
-        while self.tdyn * ntdyn < self.T[-1]:
-            arg = np.append(arg, np.argwhere(
-                self.T > self.tdyn * ntdyn).flatten()[0])
-            ntdyn += 1
-        relaxx = np.array(self.star['[02]posx'])[arg] * u.cm.in_units('AU')
-        relaxy = np.array(self.star['[03]posy'])[arg] * u.cm.in_units('AU')
-        plt.scatter(relaxx, relaxy, marker='+', s=50, color='k')
+        if self.tdyn > 0:
+            while self.tdyn * ntdyn < self.T[-1]:
+                arg = np.append(arg, np.argwhere(
+                    self.T > self.tdyn * ntdyn).flatten()[0])
+                ntdyn += 1
+            relaxx = np.array(self.star['[02]posx'])[arg] * u.cm.in_units('AU')
+            relaxy = np.array(self.star['[03]posy'])[arg] * u.cm.in_units('AU')
+            plt.scatter(relaxx, relaxy, marker='+', s=50, color='k')
         plt.xlabel('X (AU)', fontsize=20)
         plt.ylabel('Y (AU)', fontsize=20)
         plt.axis('equal')
@@ -114,13 +124,15 @@ class SinkEvol:
 
     def delta_t(self):
         dT = self.T[1:] - self.T[:-1]
-        print(dT.min(), dT.max(), np.median(dT))
+        #print(dT.min(), dT.max(), np.median(dT))
         f, ax = plt.subplots(2, 1, figsize=(12, 12))
         ax[0].hist(dT, bins=100)
         ax[1].plot(range(len(dT)), dT)
-        ax[1].axvline(self.tdyn * 5, color='k', linestyle='--')
+        if self.tdyn > 0:
+            arg = np.argwhere(self.T > self.tdyn * 5).flatten()[0]
+            ax[1].axvline(arg, color='k', linestyle='--')
         plt.tight_layout()
-        # plt.savefig('../../TDE_plot{}.pdf'.format(self.runs))
+        plt.savefig('../../TDE_plot/{}.pdf'.format(self.runs))
         plt.show()
 
 
@@ -130,7 +142,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-d', dest='DIR',
                     help='Directory', default='ptgcliu')
 parser.add_argument('--run', '-r', dest='runs',
-                    help='Specific runs directory', default='M0.8_1')
+                    help='Specific runs directory', default='m0.8_p1_b0.6')
 parser.add_argument('--force', '-f', dest='force',
                     help='Force to rewrite pruned datafile', default=False, action='store_true')
 parser.add_argument('--clean', '-c', dest='clean',
@@ -139,5 +151,5 @@ args = parser.parse_args()
 
 test = SinkEvol(DIR=args.DIR, runs=args.runs,
                 force=args.force, clean=args.clean)
-#test.orbit()
+test.orbit()
 test.delta_t()
