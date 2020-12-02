@@ -95,7 +95,7 @@ For a sun-type star, $a\sim10^3\ M_6^{-1/3}r_g$, where $M_6=M_\text H/(10^6 M_\o
 
 The orbital period is
 $$
-T_{t}=\sqrt\frac{a^3}{GM_\text H}\sim\sqrt{\frac{M_\text Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\left(\frac{m_*}{M_\odot}\right)^{-1}\left(\frac{R_*}{R_\odot}\right)^{3/2}\text{ yr}
+P=\sqrt\frac{a^3}{GM_\text H}\sim\sqrt{\frac{M_\text Hr_*^3}{Gm_*^2}}\sim0.05\ M_6^{1/2}\left(\frac{m_*}{M_\odot}\right)^{-1}\left(\frac{R_*}{R_\odot}\right)^{3/2}\text{ yr}
 $$
 while the initial orbital period is $\sim 20\ M_6\text{ yr}$, a factor of $400\ M_6^{1/2}$ longer for a solar-type star.
 
@@ -139,3 +139,50 @@ is even independent of the stellar mass and radius.
 Additionally, as the mass ratio approaches infinity, the asymmetry of the tidal field becomes progressively less important as $R_∗ \ll r_\text T$, with the difference in the strength of the tidal field at pericenter between the near side and the far side for a $10^6:1$ encounter being $\simeq3\%$ (Guillochon et al. 2011).
 
 With all these facts above, it is claimed that the vast majority of stellar disruptions by SMBHs can be described by just two parameters: $\beta$ and $\gamma$.
+
+
+
+## Eccentric Orbit
+
+In an eccentric orbit, the object is more bound to the black hole than that in a parabolic orbit. The orbital energy for the most bound material is
+$$
+\epsilon=-\frac{GM_\text H}{2a_*}-\frac{GM_\text H}{r_\text T^2}R_*=-\frac{GM_\text H}{2a}
+$$
+
+$$
+\begin{align*}
+\Rightarrow P&=\frac{\pi}{\sqrt 2}GM_\text H(-\epsilon)^{-3/2}=\frac{\pi}{\sqrt 2}GM_\text H\left(\frac{GM_\text H}{2a_*}+\frac{GM_\text H}{r_\text T^2}R_*\right)^{-3/2}\\
+&=\frac{\pi}{\sqrt 2}(GM_\text H)^{-1/2}\left(\frac{\beta_*(1-e_*)}{2r_\text T}+\frac{1}{r_\text T^2}R_*\right)^{-3/2}\\
+&=\frac{\pi}{\sqrt 2}\left(\frac{GM_\text H}{R_*^3}\right)^{-1/2}\left(\frac{\beta_*(1-e_*)}{2}\left(\frac{M_\text H}{M_*}\right)^{-1/3}+\left(\frac{M_\text H}{M_*}\right)^{-2/3}\right)^{-3/2}\\
+&=\frac{\pi}{\sqrt 2}\left(\frac{GM_*}{R_*^3}\right)^{-1/2}\left(\frac{M_\text H}{M_*}\right)^{1/2}\left(\frac{\beta_*(1-e_*)}{2}\left(\frac{M_\text H}{M_*}\right)^{1/3}+1\right)^{-3/2}\\
+&=\frac{\pi}{\sqrt 2}\left(\frac{GM_*}{R_*^3}\right)^{-1/2}\beta_*^{-3/2}(1-e_*)^{-3/2}\left(\frac{1}{2}+\left(\frac{M_\text H}{M_*}\right)^{-1/3}\beta_*^{-1}(1-e_*)^{-1}\right)^{-3/2}
+\end{align*}
+$$
+
+while the orbital period for the CoM is
+$$
+\begin{align*}P_*&=\frac{\pi}{\sqrt 2}\left(\frac{GM_*\beta_*^3}{R_*^3}\right)^{-1/2}\left(\frac{1-e_*}{2}\right)^{-3/2}\\
+&=2\pi\left(\frac{r_\text p^3(1-e_*)^3}{GM_\text H}\right)^{1/2}\\
+&=2\pi\left(\frac{a_*^3}{GM_\text H}\right)^{1/2}
+\end{align*}
+$$
+This is simply Kepler's III law. Interestingly we have
+$$
+\left(P^{-2/3}-P_*^{-2/3}\right)^{-3/2}=\frac{\pi}{\sqrt 2}\left(\frac{GM_*}{R_*^3}\right)^{-1/2}\left(\frac{M_\text H}{M_*}\right)^{1/2}=\frac{\pi}{\sqrt 2}\left(\frac{M_\text H}{M_*}\right)^{1/2}t_\text{dyn}
+$$
+which is the $t_\text{peak}$ in the parabolic case.
+
+Similarly, the outermost trajectory has an orbital energy of
+$$
+\epsilon=-\frac{GM_\text H\beta_*(1-e_*)}{2r_\text T}+\frac{GM_\text H}{r_\text T^2}R_*
+$$
+If it is also bound to the black hole, we have
+$$
+e_*<e_\text{crit}\equiv1-\frac2{\beta_*}\left(\frac{M_\text H}{M_*}\right)^{-1/3}
+$$
+The duration time ofmass fallback for eccentric TDEs with $e_*<e_\text{crit}$ is finite, and if $e_*\lesssim e_\text{crit}$,
+$$
+\begin{align*}
+\Delta t&=\frac{\pi}{\sqrt 2}\left(\frac{GM_*}{R_*^3}\right)^{-1/2}\beta_*^{-3/2}(1-e_*)^{-3/2}\left[\left(\frac{1}{2}-\left(\frac{M_\text H}{M_*}\right)^{-1/3}\beta_*^{-1}(1-e_*)^{-1}\right)^{-3/2}-1\right]
+\end{align*}
+$$
