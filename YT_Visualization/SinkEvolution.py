@@ -34,11 +34,12 @@ class SinkEvol:
             hostname = "fend02.hpc.ku.dk"
             port = 22
             username = "ptgcliu"
-            password = "19980321lcPTG+"
 
             client = paramiko.SSHClient()
+            key = paramiko.RSAKey.from_private_key_file(
+                '/Users/chang/.ssh/id_rsa', password='I miss Shiyu')
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(hostname, port, username, password, compress=True)
+            client.connect(hostname, port, username, pkey=key, compress=True)
             sftp_client = client.open_sftp()
             try:
                 sftp_client.get(
