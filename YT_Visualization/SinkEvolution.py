@@ -124,7 +124,12 @@ class SinkEvol:
         gpot = u.gravitational_constant * self.bh[:, mass] * u.gram
         E = -gpot / np.sqrt(r2) + 0.5 * vel2
         P = np.pi / np.sqrt(2) * gpot / (-E)**(3 / 2)
-        print(np.mean(P).in_units('day'), np.std(P).in_units('day'))
+        print(np.mean(P).in_units('day'), np.std(P, ddof=1).in_units('day'))
+        a = -gpot / 2 / E
+        rp = np.sqrt(r2.min())
+        print(rp)
+        e = 1 - rp / a
+        print(np.mean(e), np.std(e, ddof=1))
         pmean = np.mean(P).in_units('day').v
         plt.plot(x[::200], y[::200], label='{:.0f}'.format(pmean))
 
