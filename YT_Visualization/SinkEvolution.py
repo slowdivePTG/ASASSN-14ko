@@ -108,18 +108,18 @@ class SinkEvol:
         self.tdyn = 1 / np.sqrt(G * rho)
         print('Tdyn = {:.2f}'.format(self.tdyn))
 
-    def orbit(self, ax=None):
-        if ax == None:
-            plt.figure(figsize=(12, 8))
+    def orbit(self, f=None, ax=None):
+        if f == None:
+            f, ax = plt.subplots(figsize=(12, 8))
         x = ((self.star[:, posx] - self.bh[:, posx]) * u.cm).in_units('AU')
         y = ((self.star[:, posy] - self.bh[:, posy]) * u.cm).in_units('AU')
         vel2 = 0
-        for ax in [velx, vely, velz]:
-            vel2 += ((self.star[:, ax] - self.bh[:, ax])
+        for axis in [velx, vely, velz]:
+            vel2 += ((self.star[:, axis] - self.bh[:, axis])
                      * u.cm / u.s)**2
         r2 = 0
-        for ax in [posx, posy, posz]:
-            r2 += ((self.star[:, ax] - self.bh[:, ax])
+        for axis in [posx, posy, posz]:
+            r2 += ((self.star[:, axis] - self.bh[:, axis])
                    * u.cm)**2
         gpot = u.gravitational_constant * self.bh[:, mass] * u.gram
         E = -gpot / np.sqrt(r2) + 0.5 * vel2
@@ -131,7 +131,7 @@ class SinkEvol:
         e = 1 - rp / a
         print(np.mean(e), np.std(e, ddof=1))
         pmean = np.mean(P).in_units('day').v
-        plt.plot(x[::200], y[::200], label='{:.0f}'.format(pmean))
+        plt.plot(x, y, label='{:.0f}'.format(pmean))
 
         '''ntdyn = 1
             arg = np.array([], dtype='i4')
@@ -141,11 +141,39 @@ class SinkEvol:
                         self.T > self.tdyn * ntdyn).flatten()[0])
                     ntdyn += 1
                 plt.scatter(x[arg], y[arg], marker='+', s=50, color='k')'''
-        plt.xlabel('X (AU)', fontsize=20)
-        plt.ylabel('Y (AU)', fontsize=20)
+        ax.set_xlabel('X (AU)', fontsize=20)
+        ax.set_ylabel('Y (AU)', fontsize=20)
         plt.axis('equal')
-        plt.tight_layout()
-        # plt.show()
+        f.tight_layout()
+
+    def orbit_energy(self, f=None, ax=None):
+        if f == None:
+            f, ax = plt.figure(2, 1, figsize=(8, 16), sharex=True)
+        x = ((self.star[:, posx] - self.bh[:, posx]) * u.cm).in_units('AU')
+        y = ((self.star[:, posy] - self.bh[:, posy]) * u.cm).in_units('AU')
+        vel2 = 0
+        for axis in [velx, vely, velz]:
+            vel2 += ((self.star[:, axis] - self.bh[:, axis])
+                     * u.cm / u.s)**2
+        r2 = 0
+        for axis in [posx, posy, posz]:
+            r2 += ((self.star[:, axis] - self.bh[:, axis])
+                   * u.cm)**2
+        gpot = u.gravitational_constant * self.bh[:, mass] * u.gram
+        E = -gpot / np.sqrt(r2) + 0.5 * vel2
+        P = np.pi / np.sqrt(2) * gpot / (-E)**(3 / 2)
+        a = -gpot / 2 / E
+        rp = np.sqrt(r2.min())
+        e = 1 - rp / a
+        pmean = np.mean(P).in_units('day').v
+        ax[0].plot(np.sqrt(r2 / r2.min()), E,
+                   label='{:.0f}'.format(pmean))
+        ax[1].plot(np.sqrt(r2 / r2.min()),
+                   (E - E[0]) / (gpot / np.sqrt(r2)).max())
+        ax[1].set_xlabel('r (rp)', fontsize=20)
+        ax[0].set_ylabel('E (erg/g)', fontsize=20)
+        ax[1].set_ylabel('E (Ep)', fontsize=20)
+        f.tight_layout()
 
     def delta_t(self):
         dT = self.T[1:] - self.T[:-1]
@@ -174,10 +202,12 @@ parser.add_argument('--clean', '-c', dest='clean',
                     help='Clean pruned datafiles', default=False, action='store_true')
 args = parser.parse_args()
 
-f, ax = plt.subplots(figsize=(8, 8))
+#f1, ax1 = plt.subplots(figsize=(8, 8))
+f2, ax2 = plt.subplots(2, 1, figsize=(8, 9))
 for run in args.runs:
     test = SinkEvol(DIR=args.DIR, runs=run,
                     force=args.force, clean=args.clean)
-    test.orbit(ax=ax)
-f.legend()
+    #test.orbit(f=f1, ax=ax1)
+    test.orbit_energy(f=f2, ax=ax2)
+# f1.legend()
 plt.show()
