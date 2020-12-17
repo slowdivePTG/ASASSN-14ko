@@ -2,8 +2,8 @@
 
 # USER PARAMETERS
 # These parameters typically vary from run to run.
-# M = 0.8000 msun
-# R = 0.7134 rsun
+# M = 0.80 msun
+# R = 0.71 rsun
 # tdyn = 1.0726e+03 s
 
 # Are we restarting a run? Uncomment the following lines and select the
@@ -15,9 +15,9 @@
 
 # Output options (plot files and checkpoint files).
 basenm                     = "multitidal_"
-checkpointFileIntervalTime = 1072.60   # 1 tdyn
+checkpointFileIntervalTime = 1072.58   # 1 tdyn
 #checkpointFileIntervalStep = 10
-plotFileIntervalTime       = 1072.60   # 1 tdyn
+plotFileIntervalTime       = 107258.18   # 100 tdyn
 particlefileintervaltime   = 0.
 wall_clock_checkpoint      = 1e10    # won't output a wall clock checkpoint
 
@@ -43,7 +43,7 @@ sim_pAmbient   = 1.0e1
 sim_tAmbient   = 1.0e3
 
 # Maximum time to run simulation.
-tmax = 107260.11   # 100 tdyn
+tmax = 107258.18   # 100 tdyn
 
 useCool = .false.
 
@@ -56,7 +56,7 @@ sim_condCoeff = 0.0
 coolDtFactor = 1.d5
 
 # Massive perturber parameters.
-sim_ptMass = 1.9891e39
+sim_ptMass = 1.3919e+41
 sim_starPtMass = 1.0e0
 
 # Parent parameters
@@ -66,8 +66,7 @@ sim_parentPeri = 1.e13
 # Initial orbit.
 sim_periBeta  = 0.6
 sim_startBeta = 0.1
-sim_orbEcc    = 0.986747
-
+sim_orbEcc    = 0.99999
 sim_moveFixedToCOM = .true.
 
 # Zero out acceleration about one of the particles (1: resolved object, 2+: one of the pt. masses)
@@ -78,7 +77,7 @@ sim_useRadialProfile = .false.
 sim_xRayFraction = 0.0
 
 # Parameters of initial relaxation of object to grid.
-sim_tRelax = 5363.01   # 5 tdyn
+sim_tRelax = 5362.91   # 5 tdyn
 sim_relaxRate = 0.9
 sim_tSpinup   = 0.0e4
 sim_rotFac    = 0.0

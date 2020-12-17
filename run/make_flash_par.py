@@ -1,9 +1,21 @@
 import mesa_reader as mr
 import numpy as np
 from yt.units import *
+import os
+import argparse
+
+parser = argparse.ArgumentParser(
+    description='Rewrite the flash.par after renewing the stellar model and orbital parameters.')
+parser.add_argument('--profile',
+                    help='Profile number')
+parser.add_argument('--period',
+                    help='Orbital period (day)', default=-1, type=int)
+parser.add_argument('--beta',
+                    help='Penatration parameter', default=1.0, type=float)
+args = parser.parse_args()
 
 
-def make_flash_par(num):
+def make_flash_par(num, p, beta):
     h = mr.MesaData('profile{}.data'.format(num))
     R = (h.photosphere_r * Rsun).in_cgs()
     M = (h.star_mass * Msun).in_cgs()
@@ -11,10 +23,8 @@ def make_flash_par(num):
     Trelax = tdyn * 5
     Tsim = tdyn * 100
     Mbh = 7e7 * Msun
-    P = 110 * day
     #a = ((gravitational_constant * Mbh / 4 / np.pi**2) * P**2)**(1 / 3)
     rT = (R * (Mbh / M)**(1 / 3)).in_cgs()
-    beta = 0.6
     r_peri = rT / beta
     #e = 1 - r_peri / a
     #print(a.in_units('AU'), r_peri.in_units('AU'))
@@ -45,7 +55,10 @@ def make_flash_par(num):
 
         lines[58] = 'sim_ptMass = {:.4e}\n'.format(float(Mbh.in_cgs()))
         lines[66] = 'sim_periBeta  = {:.1f}\n'.format(beta)
-        lines[68] = 'sim_period    = {:.6e}\n'.format(float(P.in_units('s')))
+        if p == -1:
+            lines[68] = 'sim_period    = {:.6e}\n'.format(float(p))
+        else:
+            lines[68] = 'sim_orbEcc    = 0.99999'
         lines[170] = 'sink_softening_radius = {:.8e} # ~1/2 rp\n'.format(
             float(r_peri) / 2)
 
@@ -54,5 +67,7 @@ def make_flash_par(num):
             f.write(l)
 
 
-import sys
-make_flash_par(sys.argv[1])
+make_flash_par(num=args.profile, p=args.period, beta=args.beta)
+os.system('rm sm.dat')
+os.system(
+    'python ~/jYT/mesa_wrapper.py -i profile{}.data -o sm.dat -e h1 he3 he4 li7 be9 c12 n14 o16 f19 ne20 na23 mg24 mg26 al27 si28 p31 s32'.format(args.profile))
