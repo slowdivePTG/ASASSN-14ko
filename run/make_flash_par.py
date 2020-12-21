@@ -55,10 +55,10 @@ def make_flash_par(num, p, beta):
 
         lines[58] = 'sim_ptMass = {:.4e}\n'.format(float(Mbh.in_cgs()))
         lines[66] = 'sim_periBeta  = {:.1f}\n'.format(beta)
-        if p == -1:
-            lines[68] = 'sim_period    = {:.6e}\n'.format(float(p))
+        if p != -1:
+            lines[68] = 'sim_period    = {:.6e}\n'.format(p * 86400)
         else:
-            lines[68] = 'sim_orbEcc    = 0.99999'
+            lines[68] = 'sim_orbEcc    = 0.99999\n'
         lines[170] = 'sink_softening_radius = {:.8e} # ~1/2 rp\n'.format(
             float(r_peri) / 2)
 

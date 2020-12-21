@@ -98,8 +98,8 @@ class dmdt:
         f, ax = plt.subplots(figsize=(8, 6))
     except:
       pass
-    # smooth(self.e, self.dm_de, n=Bin)
-    s_e, s_dm_de = bins(self.e, n=Bin), bins(self.dm_de, n=Bin)
+    # bins(self.e, n=Bin), bins(self.dm_de, n=Bin)
+    s_e, s_dm_de = smooth(self.e, self.dm_de, n=Bin)
     ax.scatter(s_e,
                s_dm_de,
                s=1,
