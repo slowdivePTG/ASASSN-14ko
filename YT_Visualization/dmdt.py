@@ -25,17 +25,14 @@ def smooth(x_trim, y_trim, n=100, log=False):
   NUM_X_PER_INTERVAL = 1000
   if log:
     log_range = np.log10(x_trim[-1] / x_trim[0])
-    my_bins = np.logspace(np.log10(x_trim[0]),
-                          np.log10(x_trim[-1]),
-                          num=int(round(n * log_range, 0)))
+    my_bins = np.logspace(np.log10(x_trim[0]), np.log10(
+        x_trim[-1]), num=int(round(n * log_range, 0)))
   else:
     linear_range = x_trim[-1] - x_trim[0]
     my_bins = np.linspace(x_trim[0], x_trim[-1], num=int(round(n, 0)))
   bin_centers = np.array(find_bin_centers(my_bins))
-  y_binned = stats.binned_statistic(x_trim,
-                                    y_trim,
-                                    statistic='mean',
-                                    bins=my_bins)
+  y_binned = stats.binned_statistic(
+      x_trim, y_trim, statistic='mean', bins=my_bins)
 
   # some y_binned[0] are nan because nothing in that bin
   sel = np.where(np.isfinite(y_binned[0]))
