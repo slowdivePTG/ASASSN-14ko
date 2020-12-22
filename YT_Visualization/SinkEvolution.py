@@ -209,5 +209,5 @@ for run in args.runs:
                     force=args.force, clean=args.clean)
     #test.orbit(f=f1, ax=ax1)
     test.orbit_energy(f=f2, ax=ax2)
-# f1.legend()
+f2.legend()
 plt.show()
