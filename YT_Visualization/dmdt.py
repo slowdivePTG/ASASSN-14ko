@@ -91,7 +91,7 @@ class dmdt:
     self.F_orig = (self.mdot_orig * u.Msun / u.yr * eta * u.c**2 / np.pi /
                    4 / D**2).in_units('erg/s/cm**2')
 
-  def dm_de_e(self, ax, Bin=100, color='k'):
+  def dm_de_e(self, ax, Bin=100, color='k', Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun, beta=1):
     # dm_de v.s. e
     try:
       if ax == None:
@@ -100,14 +100,16 @@ class dmdt:
       pass
     # bins(self.e, n=Bin), bins(self.dm_de, n=Bin)
     s_e, s_dm_de = smooth(self.e, self.dm_de, n=Bin)
-    ax.scatter(s_e,
+    deltae = (u.gravitational_constant * Mh / R *
+              (M / Mh)**(2 / 3)).in_cgs() * beta**2
+    ax.scatter(s_e / deltae,
                s_dm_de,
                s=1,
                color=color,
                label='{}, P = {}'.format(self.DIR, self.Period))
-    ax.scatter(self.e, self.dm_de, s=0.1, alpha=0.5, color=color)
+    ax.scatter(self.e / deltae, self.dm_de, s=0.1, alpha=0.5, color=color)
     ax.set_yscale('log')
-    ax.set_xlabel(r'$\epsilon$ (erg/g)', fontsize=20)
+    ax.set_xlabel(r'$\epsilon/\Delta\epsilon$', fontsize=20)
     ax.set_ylabel(r'd$M$/d$\epsilon$ (g$\cdot$s$^2$/cm$^2$)', fontsize=20)
 
   def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=300):
