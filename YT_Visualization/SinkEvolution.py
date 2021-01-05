@@ -202,12 +202,13 @@ parser.add_argument('--clean', '-c', dest='clean',
                     help='Clean pruned datafiles', default=False, action='store_true')
 args = parser.parse_args()
 
-#f1, ax1 = plt.subplots(figsize=(8, 8))
-f2, ax2 = plt.subplots(2, 1, figsize=(8, 9))
+f1, ax1 = plt.subplots(figsize=(8, 8))
+#f2, ax2 = plt.subplots(2, 1, figsize=(8, 9))
 for run in args.runs:
     test = SinkEvol(DIR=args.DIR, runs=run,
                     force=args.force, clean=args.clean)
-    #test.orbit(f=f1, ax=ax1)
-    test.orbit_energy(f=f2, ax=ax2)
-f2.legend()
+    test.orbit(f=f1, ax=ax1)
+    #test.orbit_energy(f=f2, ax=ax2)
+f1.legend()
+#f2.legend()
 plt.show()
