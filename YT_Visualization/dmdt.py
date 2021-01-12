@@ -21,8 +21,7 @@ def find_bin_centers(x):
     return (x[1:] + x[:-1]) / 2
 
 
-def smooth(x_trim, y_trim, n=100, log=False):
-    NUM_X_PER_INTERVAL = 1000
+def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=False):
     if log:
         log_range = np.log10(x_trim[-1] / x_trim[0])
         my_bins = np.logspace(np.log10(x_trim[0]), np.log10(
@@ -91,7 +90,7 @@ class dmdt:
         self.F_orig = (self.mdot_orig * u.Msun / u.yr * eta * u.c**2 / np.pi /
                        4 / D**2).in_units('erg/s/cm**2')
 
-    def dm_de_e(self, ax, Bin=100, color='k', Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun, beta=1):
+    def dm_de_e(self, ax, Bin=100, color='grey', Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun, beta=1):
         # dm_de v.s. e
         try:
             if ax == None:
@@ -99,7 +98,7 @@ class dmdt:
         except:
             pass
         s_e, s_dm_de = bins(self.e, n=Bin), bins(self.dm_de, n=Bin)
-        #s_e, s_dm_de = smooth(self.e, self.dm_de, n=Bin)
+        # s_e, s_dm_de = smooth(self.e, self.dm_de, n=Bin)
         deltae = (u.gravitational_constant * Mh / R *
                   (M / Mh)**(2 / 3)).in_cgs() * beta**2
         ax.plot(s_e / deltae,
@@ -112,37 +111,34 @@ class dmdt:
         ax.set_xlabel(r'$\epsilon/\Delta\epsilon$', fontsize=20)
         ax.set_ylabel(r'd$M$/d$\epsilon$ (g$\cdot$s$^2$/cm$^2$)', fontsize=20)
 
-    def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=300):
+    def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=100, N=50):
         # Mdot v.s. t
         try:
             if ax == None:
                 f, ax = plt.subplots(figsize=(8, 6))
         except:
             pass
-        # s_t, s_F smooth(self.t, self.F_orig, n=Bin, log=True)
-        #s_t, s_mdot = smooth(self.t, self.mdot_orig, n=Bin, log=True)
-        s_t, s_F, s_mdot = bins(self.t, n=Bin), bins(
-            self.F, n=Bin), bins(self.mdot, n=Bin)
+        s_t, s_F = smooth(self.t, self.F_orig, n=N,
+                          NUM_X_PER_INTERVAL=Bin, log=True)
+        s_t, s_mdot = smooth(self.t, self.mdot_orig, n=N,
+                             NUM_X_PER_INTERVAL=Bin, log=True)
         if norm:
             tindex = np.argmax(s_F)
-            ax.scatter((s_t - s_t[tindex]) * normfactor,
-                       s_F / np.max(s_F),
-                       s=1,
-                       label='{}, P = {}'.format(self.DIR, self.Period))
+            ax.plot((s_t - s_t[tindex]) * normfactor,
+                    s_F / np.max(s_F),
+                    label='{}, P = {}'.format(self.DIR, self.Period))
             ax.set_ylabel(r'Normalized Flux', fontsize=0)
         elif Flux:
-            ax.scatter(self.t, self.F_orig, s=0.1, alpha=0.5)
-            ax.scatter(self.t,
-                       self.F,
-                       s=1,
-                       label='{}, P = {}'.format(self.DIR, self.Period))
+            ax.plot(self.t, self.F_orig, alpha=0.3)
+            ax.plot(self.t,
+                    self.F,
+                    label='{}, P = {}'.format(self.DIR, self.Period))
             ax.set_ylabel(r'$F$ (erg/s/cm$^2$)', fontsize=20)
         else:
-            ax.scatter(self.t, self.mdot_orig, s=0.1, alpha=0.5)
-            ax.scatter(s_t,
-                       s_mdot,
-                       s=1,
-                       label='{}, P = {}'.format(self.DIR, self.Period))
+            ax.plot(self.t, self.mdot_orig, alpha=0.3)
+            ax.plot(s_t,
+                    s_mdot,
+                    label='{}, P = {}'.format(self.DIR, self.Period))
             ax.set_ylabel(r'$\dot M$ (Msun/yr)', fontsize=20)
 
         ax.set_xlabel('Time (day)', fontsize=20)
