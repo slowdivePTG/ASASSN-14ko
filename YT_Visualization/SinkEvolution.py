@@ -107,12 +107,10 @@ class SinkEvol:
         rho = self.ms / (self.rs**3)
         self.tdyn = 1 / np.sqrt(G * rho)
         print('Tdyn = {:.2f}'.format(self.tdyn))
-
-    def orbit(self, f=None, ax=None):
-        if f == None:
-            f, ax = plt.subplots(figsize=(12, 8))
-        x = ((self.star[:, posx] - self.bh[:, posx]) * u.cm).in_units('AU')
+        x = ((self.star[:, posx] - self.bh[:, posx])
+             * u.cm).in_units('AU')
         y = ((self.star[:, posy] - self.bh[:, posy]) * u.cm).in_units('AU')
+        self.x, self.y = x, y
         vel2 = 0
         for axis in [velx, vely, velz]:
             vel2 += ((self.star[:, axis] - self.bh[:, axis])
@@ -121,17 +119,25 @@ class SinkEvol:
         for axis in [posx, posy, posz]:
             r2 += ((self.star[:, axis] - self.bh[:, axis])
                    * u.cm)**2
+        self.r = np.sqrt(r2)
         gpot = u.gravitational_constant * self.bh[:, mass] * u.gram
-        E = -gpot / np.sqrt(r2) + 0.5 * vel2
-        P = np.pi / np.sqrt(2) * gpot / (-E)**(3 / 2)
-        print(np.mean(P).in_units('day'), np.std(P, ddof=1).in_units('day'))
-        a = -gpot / 2 / E
+        self.gpot = gpot
+        self.E = -gpot / self.r + 0.5 * vel2
+        self.P = np.pi / np.sqrt(2) * gpot / (-self.E)**(3 / 2)
+        print(np.mean(self.P).in_units('day'),
+              np.std(self.P, ddof=1).in_units('day'))
+        self.a = -gpot / 2 / self.E
         rp = np.sqrt(r2.min())
         print(rp)
-        e = 1 - rp / a
+        e = 1 - rp / self.a
         print(np.mean(e), np.std(e, ddof=1))
-        pmean = np.mean(P).in_units('day').v
-        plt.plot(x, y, label='{:.0f}'.format(pmean))
+
+    def orbit(self, f=None, ax=None):
+        if f == None:
+            f, ax = plt.subplots(figsize=(12, 8))
+
+        pmean = np.mean(self.P).in_units('day').v
+        plt.plot(self.x, self.y, label='{:.0f}'.format(pmean))
 
         '''ntdyn = 1
             arg = np.array([], dtype='i4')
@@ -149,27 +155,12 @@ class SinkEvol:
     def orbit_energy(self, f=None, ax=None):
         if f == None:
             f, ax = plt.figure(2, 1, figsize=(8, 16), sharex=True)
-        x = ((self.star[:, posx] - self.bh[:, posx]) * u.cm).in_units('AU')
-        y = ((self.star[:, posy] - self.bh[:, posy]) * u.cm).in_units('AU')
-        vel2 = 0
-        for axis in [velx, vely, velz]:
-            vel2 += ((self.star[:, axis] - self.bh[:, axis])
-                     * u.cm / u.s)**2
-        r2 = 0
-        for axis in [posx, posy, posz]:
-            r2 += ((self.star[:, axis] - self.bh[:, axis])
-                   * u.cm)**2
-        gpot = u.gravitational_constant * self.bh[:, mass] * u.gram
-        E = -gpot / np.sqrt(r2) + 0.5 * vel2
-        P = np.pi / np.sqrt(2) * gpot / (-E)**(3 / 2)
-        a = -gpot / 2 / E
-        rp = np.sqrt(r2.min())
-        e = 1 - rp / a
-        pmean = np.mean(P).in_units('day').v
-        ax[0].plot(np.sqrt(r2 / r2.min()), E,
+
+        pmean = np.mean(self.P).in_units('day').v
+        ax[0].plot(self.r / self.r.min(), self.E,
                    label='{:.0f}'.format(pmean))
-        ax[1].plot(np.sqrt(r2 / r2.min()),
-                   (E - E[0]) / (gpot / np.sqrt(r2)).max())
+        ax[1].plot(self.r / self.r.min(),
+                   (self.E - self.E[0]) / (self.gpot / self.r).max())
         ax[1].set_xlabel('r (rp)', fontsize=20)
         ax[0].set_ylabel('E (erg/g)', fontsize=20)
         ax[1].set_ylabel('E (Ep)', fontsize=20)
@@ -202,13 +193,16 @@ parser.add_argument('--clean', '-c', dest='clean',
                     help='Clean pruned datafiles', default=False, action='store_true')
 args = parser.parse_args()
 
-f1, ax1 = plt.subplots(figsize=(8, 8))
-#f2, ax2 = plt.subplots(2, 1, figsize=(8, 9))
+#f1, ax1 = plt.subplots(figsize=(8, 8))
+#f2, ax2 = plt.subplots(figsize=(8, 8))
+f2, ax2 = plt.subplots(2, 1, figsize=(8, 9))
 for run in args.runs:
     test = SinkEvol(DIR=args.DIR, runs=run,
                     force=args.force, clean=args.clean)
-    test.orbit(f=f1, ax=ax1)
+    #test.orbit(f=f1, ax=ax1)
+    ax2[0].plot(test.T / test.tdyn, test.E, label=str(run))
+    ax2[1].plot(test.T / test.tdyn, test.r, label=str(run))
     #test.orbit_energy(f=f2, ax=ax2)
-f1.legend()
-#f2.legend()
+# f1.legend()
+ax2[0].legend()
 plt.show()
