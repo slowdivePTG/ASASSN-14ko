@@ -21,7 +21,7 @@ def find_bin_centers(x):
     return (x[1:] + x[:-1]) / 2
 
 
-def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=False):
+def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=True):
     if log:
         log_range = np.log10(x_trim[-1] / x_trim[0])
         my_bins = np.logspace(np.log10(x_trim[0]), np.log10(
@@ -115,7 +115,8 @@ class dmdt:
         ax.set_xlabel(r'$\epsilon/\Delta\epsilon$', fontsize=20)
         ax.set_ylabel(r'd$M$/d$\epsilon$ (g$\cdot$s$^2$/cm$^2$)', fontsize=20)
 
-    def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=100, N=30):
+    def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=1000, N=30,
+               Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun):
         # Mdot v.s. t
         try:
             if ax == None:
@@ -126,6 +127,10 @@ class dmdt:
                           NUM_X_PER_INTERVAL=Bin, log=True)
         s_t, s_mdot = smooth(self.t, self.mdot_orig, n=N,
                              NUM_X_PER_INTERVAL=Bin, log=True)
+        peak_index = np.argmax(s_mdot)
+        arg_efold = np.argwhere(s_mdot >= s_mdot.max() / np.e).flatten()
+        self.efolding_rise = s_t[peak_index] - s_t[arg_efold[0]]
+        self.efolding_fall = s_t[arg_efold[-1]] - s_t[peak_index]
         if norm:
             tindex = np.argmax(s_F)
             ax.plot((s_t - s_t[tindex]) * normfactor,
