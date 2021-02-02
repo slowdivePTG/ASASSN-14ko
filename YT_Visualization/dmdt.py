@@ -13,7 +13,7 @@ import sys
 
 
 def bins(arr, n):
-    arr2 = [arr[i:i + n + 1].mean() for i in range(len(arr) - n)]
+    arr2 = np.array([arr[i:i + n + 1].mean() for i in range(len(arr) - n)])
     return arr2
 
 
@@ -123,9 +123,11 @@ class dmdt:
                 f, ax = plt.subplots(figsize=(8, 6))
         except:
             pass
-        s_t, s_F = smooth(self.t, self.F_orig, n=N,
+        s_t, s_F, s_mdot = bins(self.t, Bin), bins(
+            self.F, Bin), bins(self.mdot, Bin)
+        s_t, s_F = smooth(self.t, self.F, n=N,
                           NUM_X_PER_INTERVAL=Bin, log=True)
-        s_t, s_mdot = smooth(self.t, self.mdot_orig, n=N,
+        s_t, s_mdot = smooth(self.t, self.mdot, n=N,
                              NUM_X_PER_INTERVAL=Bin, log=True)
         peak_index = np.argmax(s_mdot)
         arg_efold = np.argwhere(s_mdot >= s_mdot.max() / np.e).flatten()
@@ -135,19 +137,19 @@ class dmdt:
             tindex = np.argmax(s_F)
             ax.plot((s_t - s_t[tindex]) * normfactor,
                     s_F / np.max(s_F),
-                    label='{}, P = {}'.format(self.DIR, self.Period))
+                    label=self.label)
             ax.set_ylabel(r'Normalized Flux', fontsize=0)
         elif Flux:
-            ax.plot(self.t, self.F_orig, alpha=0.3)
-            ax.plot(self.t,
-                    self.F,
-                    label='{}, P = {}'.format(self.DIR, self.Period))
+            # ax.plot(self.t, self.F_orig, alpha=0.3)
+            ax.plot(s_t,
+                    s_F,
+                    label=self.label)
             ax.set_ylabel(r'$F$ (erg/s/cm$^2$)', fontsize=20)
         else:
-            ax.plot(self.t, self.mdot_orig, alpha=0.3)
+            # ax.plot(self.t, self.mdot_orig, alpha=0.3)
             ax.plot(s_t,
                     s_mdot,
-                    label='{}, P = {}'.format(self.DIR, self.Period))
+                    label=self.label)
             ax.set_ylabel(r'$\dot M$ (Msun/yr)', fontsize=20)
 
         ax.set_xlabel('Time (day)', fontsize=20)
