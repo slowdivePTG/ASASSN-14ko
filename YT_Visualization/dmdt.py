@@ -6,6 +6,15 @@ import matplotlib.pyplot as plt
 from scipy.ndimage.filters import gaussian_filter
 from scipy.integrate import simps, cumtrapz
 from scipy.interpolate import splev, splrep, interp1d, splint
+###   splrep(x, y[, w, xb, xe, k, task, s, t, …])   ###
+# Find the B-spline representation of a 1-D curve.
+
+###   splev(x, tck[, der, ext])   ###
+# Evaluate a B-spline or its derivatives.
+
+###   splint(a, b, tck[, full_output])   ###
+# Evaluate the definite integral of a B-spline between two given points.
+
 from scipy import stats
 import os
 import argparse
