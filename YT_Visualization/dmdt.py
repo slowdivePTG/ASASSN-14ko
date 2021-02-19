@@ -74,14 +74,14 @@ def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=True):
 
 
 class dmdt:
-    def __init__(self, DIR, chk, Period, D=188 * u.Mpc, eta=0.06, ax=None):
+    def __init__(self, DIR, chk, Period, bin=10000, D=188 * u.Mpc, eta=0.06, ax=None):
         os.chdir('/Users/chang/Desktop/Santa Cruz/TDE_plot')
         os.chdir(DIR)
 
         if Period < 0:
-            filename = 'b10000_dm_de_chk_{}.npz'.format(chk)
+            filename = 'b{}_dm_de_chk_{}.npz'.format(bin, chk)
         else:
-            filename = 'b10000_dm_de_chk_{}_{}.npz'.format(chk, Period)
+            filename = 'b{}_dm_de_chk_{}_{}.npz'.format(bin, chk, Period)
 
         npzfile = np.load(filename)
         output = npzfile['x']
