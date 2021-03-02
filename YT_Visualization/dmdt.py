@@ -74,7 +74,9 @@ def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=True):
 
 
 class dmdt:
-    def __init__(self, DIR, chk, Period, bin=10000, D=188 * u.Mpc, eta=0.06, ax=None):
+    def __init__(self, DIR, chk, Period,
+                 bin=10000, D=188 * u.Mpc, eta=0.06, ax=None,
+                 Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun):
         os.chdir('/Users/chang/Desktop/Santa Cruz/TDE_plot')
         os.chdir(DIR)
 
@@ -87,7 +89,16 @@ class dmdt:
         output = npzfile['x']
         output_bd = npzfile['y']
         output_mdot = npzfile['z']
-        self.DIR, self.Period = DIR, Period
+        self.DIR = DIR
+        if Period < 0:
+            self.Period = np.inf * u.day
+        else:
+            self.Period = Period * u.day
+        self.beta = float(self.DIR[10:13])
+        rT = (Mh / M)**(1 / 3) * R
+        rp = rT / self.beta
+        self.Ecc = float(1 - (4 * np.pi**2 * rp**3 / self.Period **
+                              2 / u.gravitational_constant / Mh)**(1 / 3))
         self.e = output[:, 0]
         self.dm_de, self.s_dm_de = output[:, 1], output[:, 2]
 
@@ -99,9 +110,11 @@ class dmdt:
         self.F_orig = (self.mdot_orig * u.Msun / u.yr * eta * u.c**2 / np.pi /
                        4 / D**2).in_units('erg/s/cm**2')
         if Period < 0:
-            self.label = self.DIR
+            self.label = 'beta = {:.1f}, e = {:.0f}'.format(
+                self.beta, self.Ecc)
         else:
-            self.label = '{}, P = {}'.format(self.DIR, self.Period)
+            self.label = 'beta = {:.1f}, P = {}, e = {:.4f}'.format(
+                self.beta, self.Period, self.Ecc)
 
     def dm_de_e(self, ax, Bin=100, color='grey', Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun, beta=1):
         # dm_de v.s. e
@@ -118,11 +131,12 @@ class dmdt:
                 s_dm_de,
                 # s=1,
                 color=color,
-                label='{}, P = {}'.format(self.DIR, self.Period))
+                label=self.label)
         ax.plot(self.e / deltae, self.dm_de, alpha=0.2, color=color)
         ax.set_yscale('log')
-        ax.set_xlabel(r'$\epsilon/\Delta\epsilon$', fontsize=20)
-        ax.set_ylabel(r'd$M$/d$\epsilon$ (g$\cdot$s$^2$/cm$^2$)', fontsize=20)
+        ax.set_xlabel(r'$\epsilon/\delta\epsilon$', fontsize=25)
+        ax.set_ylabel(r'd$M$/d$\epsilon$ (g$\cdot$s$^2$/cm$^2$)', fontsize=25)
+        ax.tick_params(labelsize=20)
 
     def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=1000, N=30,
                Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun):
@@ -147,19 +161,20 @@ class dmdt:
             ax.plot((s_t - s_t[tindex]) * normfactor,
                     s_F / np.max(s_F),
                     label=self.label)
-            ax.set_ylabel(r'Normalized Flux', fontsize=0)
+            ax.set_ylabel(r'Normalized Flux', fontsize=25)
         elif Flux:
             # ax.plot(self.t, self.F_orig, alpha=0.3)
             ax.plot(s_t,
                     s_F,
                     label=self.label)
-            ax.set_ylabel(r'$F$ (erg/s/cm$^2$)', fontsize=20)
+            ax.set_ylabel(r'$F$ (erg/s/cm$^2$)', fontsize=25)
         else:
             # ax.plot(self.t, self.mdot_orig, alpha=0.3)
             ax.plot(s_t,
                     s_mdot,
                     label=self.label)
-            ax.set_ylabel(r'$\dot M$ (Msun/yr)', fontsize=20)
+            ax.set_ylabel(r'$\dot M$ (Msun/yr)', fontsize=25)
 
-        ax.set_xlabel('Time (day)', fontsize=20)
+        ax.set_xlabel('Time (day)', fontsize=25)
+        ax.tick_params(labelsize=20)
         plt.tight_layout()
