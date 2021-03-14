@@ -2,6 +2,7 @@ import numpy as np
 import yt
 import yt.units as u
 import matplotlib.pyplot as plt
+import glob
 
 from scipy.ndimage.filters import gaussian_filter
 from scipy.integrate import simps, cumtrapz
@@ -22,9 +23,37 @@ import sys
 
 
 def bins(arr, n):
+    def mean(arr):
+        return 10**(np.log10(arr).mean())
     arr2 = np.array([arr[i:i + n + 1].mean() for i in range(len(arr) - n)])
     return arr2
 
+'''
+def bins_above(x, y, n0, n1=3, thresh=5e-3):
+    x = bins(x, n0)
+    y = bins(y, n0)
+    flag = False
+    cut = []
+    for i in range(len(x)):
+        if (not flag) and y[i] > thresh:
+            flag = True
+            cut.append(i)
+        if (flag) and y[i] < thresh:
+            flag = False
+            cut.append(i)
+    if len(cut) % 2 != 0:
+        cut.append(-1)
+    elif len(cut) == 0:
+        return x, y
+    cut.append(-1)
+    X, Y = x[:cut[0]], y[:cut[0]]
+    for i in range(len(cut) // 2):
+        X = np.append(X, bins(x[cut[2 * i]:cut[2 * i + 1]], n1))
+        X = np.append(X, x[cut[2 * i + 1]:cut[2 * i + 2]])
+        Y = np.append(Y, bins(y[cut[2 * i]:cut[2 * i + 1]], n1))
+        Y = np.append(Y, y[cut[2 * i + 1]:cut[2 * i + 2]])
+    return X, Y
+'''
 
 def find_bin_centers(x):
     return (x[1:] + x[:-1]) / 2
@@ -65,7 +94,7 @@ def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=True):
                          max(bin_centers),
                          num=int(round(NUM_X_PER_INTERVAL, 0)))
         y2 = splev(x2, spl)
-        spl = splrep(bin_centers, y_binned_0, s=None)
+        spl = splrep(bin_centers, y_binned_0)
         y2 = splev(x2, spl)
         nts = splev(x2, spl, der=1)
         x = x2
@@ -74,14 +103,18 @@ def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=True):
 
 
 class dmdt:
-    def __init__(self, DIR, chk, Period,
+    def __init__(self, DIR, chk, Period=-1, Ecc=None,
                  bin=10000, D=188 * u.Mpc, eta=0.06, ax=None,
                  Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun):
         os.chdir('/Users/chang/Desktop/Santa Cruz/TDE_plot')
         os.chdir(DIR)
 
         if Period < 0:
-            filename = 'b{}_dm_de_chk_{}.npz'.format(bin, chk)
+            if Ecc == None:
+                filename = 'b{}_dm_de_chk_{}.npz'.format(bin, chk)
+            else:
+                filename = 'b{}_dm_de_chk_{}_*.npz'.format(bin, chk)
+                filename = glob.glob(filename)[0]
         else:
             filename = 'b{}_dm_de_chk_{}_{}.npz'.format(bin, chk, Period)
 
@@ -90,15 +123,18 @@ class dmdt:
         output_bd = npzfile['y']
         output_mdot = npzfile['z']
         self.DIR = DIR
+        self.beta = float(self.DIR[10:13])
+        rT = (Mh / M)**(1 / 3) * R
+        rp = rT / self.beta
         if Period < 0:
             self.Period = np.inf * u.day
         else:
             self.Period = Period * u.day
-        self.beta = float(self.DIR[10:13])
-        rT = (Mh / M)**(1 / 3) * R
-        rp = rT / self.beta
-        self.Ecc = float(1 - (4 * np.pi**2 * rp**3 / self.Period **
-                              2 / u.gravitational_constant / Mh)**(1 / 3))
+        if Ecc == None:
+            self.Ecc = float(1 - (4 * np.pi**2 * rp**3 / self.Period **
+                                  2 / u.gravitational_constant / Mh)**(1 / 3))
+        else:
+            self.Ecc = Ecc
         self.e = output[:, 0]
         self.dm_de, self.s_dm_de = output[:, 1], output[:, 2]
 
@@ -110,13 +146,16 @@ class dmdt:
         self.F_orig = (self.mdot_orig * u.Msun / u.yr * eta * u.c**2 / np.pi /
                        4 / D**2).in_units('erg/s/cm**2')
         if Period < 0:
-            self.label = 'beta = {:.1f}, e = {:.0f}'.format(
-                self.beta, self.Ecc)
+            self.label = 'e = {:.1f}'.format(self.Ecc)
         else:
-            self.label = 'beta = {:.1f}, P = {}, e = {:.4f}'.format(
-                self.beta, self.Period, self.Ecc)
+            self.label = 'e = {:.4f} (P = {})'.format(self.Ecc, self.Period)
 
-    def dm_de_e(self, ax, Bin=100, color='grey', Mh=7e7 * u.Msun, M=1 * u.Msun, R=1 * u.Rsun, beta=1):
+    def dm_de_e(self, ax, Bin=100, n=60,
+                color='grey', linestyle='-',
+                Mh=7e7 * u.Msun,
+                M=1 * u.Msun, R=1 * u.Rsun, beta=1,
+                shift=False,
+                search_range=0.05):
         # dm_de v.s. e
         try:
             if ax == None:
@@ -124,18 +163,33 @@ class dmdt:
         except:
             pass
         s_e, s_dm_de = bins(self.e, n=Bin), bins(self.dm_de, n=Bin)
-        # s_e, s_dm_de = smooth(self.e, self.dm_de, n=Bin)
         deltae = (u.gravitational_constant * Mh / R *
-                  (M / Mh)**(2 / 3)).in_cgs() * beta**2
-        ax.plot(s_e / deltae,
-                s_dm_de,
-                # s=1,
+                  (M / Mh)**(2 / 3)).in_cgs()  # * beta**2
+        dEde = s_e / deltae
+        s_dm_de = (s_dm_de * u.g**2 / u.erg * deltae).in_units('Msun')
+
+        if shift:
+            search = np.argwhere(abs(dEde) < search_range)
+            arg = np.argmin(s_dm_de[search])
+            dEde -= dEde[search][arg]
+        dEde_spline, s_dm_de_spline = smooth(
+            dEde, s_dm_de, n=n, NUM_X_PER_INTERVAL=1000, log=False)
+        ax.scatter(find_bin_centers(dEde)[::5],
+                   find_bin_centers(s_dm_de)[::5],
+                   # linestyle=linestyle,
+                   s=1,
+                   color=color,
+                   alpha=0.5)
+        ax.plot(dEde_spline,
+                s_dm_de_spline,
+                linewidth=2,
+                # linestyle=linestyle,
                 color=color,
                 label=self.label)
-        ax.plot(self.e / deltae, self.dm_de, alpha=0.2, color=color)
+        # ax.plot(self.e / deltae, self.dm_de, alpha=0.2, color=color)
         ax.set_yscale('log')
-        ax.set_xlabel(r'$\epsilon/\delta\epsilon$', fontsize=25)
-        ax.set_ylabel(r'd$M$/d$\epsilon$ (g$\cdot$s$^2$/cm$^2$)', fontsize=25)
+        ax.set_xlabel(r'$E/\delta E$', fontsize=25)
+        ax.set_ylabel(r'd$M$/d$E$ ($M_\odot/\delta E$)', fontsize=25)
         ax.tick_params(labelsize=20)
 
     def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=1000, N=30,
