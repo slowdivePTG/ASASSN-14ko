@@ -28,6 +28,7 @@ def bins(arr, n):
     arr2 = np.array([arr[i:i + n + 1].mean() for i in range(len(arr) - n)])
     return arr2
 
+
 '''
 def bins_above(x, y, n0, n1=3, thresh=5e-3):
     x = bins(x, n0)
@@ -54,6 +55,7 @@ def bins_above(x, y, n0, n1=3, thresh=5e-3):
         Y = np.append(Y, y[cut[2 * i + 1]:cut[2 * i + 2]])
     return X, Y
 '''
+
 
 def find_bin_centers(x):
     return (x[1:] + x[:-1]) / 2
@@ -174,15 +176,15 @@ class dmdt:
             dEde -= dEde[search][arg]
         dEde_spline, s_dm_de_spline = smooth(
             dEde, s_dm_de, n=n, NUM_X_PER_INTERVAL=1000, log=False)
-        ax.scatter(find_bin_centers(dEde)[::5],
-                   find_bin_centers(s_dm_de)[::5],
+        ax.scatter(dEde,
+                   s_dm_de,
                    # linestyle=linestyle,
                    s=1,
                    color=color,
                    alpha=0.5)
         ax.plot(dEde_spline,
                 s_dm_de_spline,
-                linewidth=2,
+                linewidth=3,
                 # linestyle=linestyle,
                 color=color,
                 label=self.label)
