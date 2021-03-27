@@ -22,10 +22,20 @@ import argparse
 import sys
 
 
-def bins(arr, n):
-    def mean(arr):
-        return 10**(np.log10(arr).mean())
-    arr2 = np.array([arr[i:i + n + 1].mean() for i in range(len(arr) - n)])
+def bins(arr, n, type='mean'):
+    def mode(arr):
+        hist, bin_edges = np.histogram(arr, bins=20)
+        bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+        return bin_centers[np.argmax(hist)]
+    bins = len(arr) // n
+    if type == 'mean':
+        arr2 = np.array([arr[i * n:i * n + n].mean() for i in range(bins)])
+    elif type == 'median':
+        arr2 = np.array([np.median(arr[i * n:i * n + n])
+                         for i in range(bins)])
+    elif type == 'mode':
+        arr2 = np.array([10**mode(np.log10(arr[i * n:i * n + n]))
+                         for i in range(bins)])
     return arr2
 
 
@@ -79,7 +89,7 @@ def smooth(x_trim, y_trim, n=100, NUM_X_PER_INTERVAL=1000, log=True):
     y_trim = y_trim[sel]
     y_binned_0 = y_binned[0][sel]
     bin_centers = bin_centers[sel]
-    spl = splrep(bin_centers, y_binned_0, s=0)
+    spl = splrep(bin_centers, y_binned_0, s=1e-2)
     if log:
         x2 = np.logspace(np.log10(min(bin_centers)),
                          np.log10(max(bin_centers)),
@@ -164,34 +174,53 @@ class dmdt:
                 f, ax = plt.subplots(figsize=(8, 6))
         except:
             pass
-        s_e, s_dm_de = bins(self.e, n=Bin), bins(self.dm_de, n=Bin)
+        s_e, s_dm_de = bins(self.e, n=50, type='mean'), bins(
+            self.dm_de, n=50, type='mean')
         deltae = (u.gravitational_constant * Mh / R *
                   (M / Mh)**(2 / 3)).in_cgs()  # * beta**2
-        dEde = s_e / deltae
-        s_dm_de = (s_dm_de * u.g**2 / u.erg * deltae).in_units('Msun')
+        dm_de = (self.dm_de * u.g**2 / u.erg * deltae).in_units('Msun')
 
         if shift:
-            search = np.argwhere(abs(dEde) < search_range)
+            search = np.argwhere(abs(s_e / deltae) < search_range)
             arg = np.argmin(s_dm_de[search])
-            dEde -= dEde[search][arg]
-        dEde_spline, s_dm_de_spline = smooth(
-            dEde, s_dm_de, n=n, NUM_X_PER_INTERVAL=1000, log=False)
-        ax.scatter(dEde,
-                   s_dm_de,
+            e_shift = (s_e / deltae)[search][arg].v
+        else:
+            e_shift = 0
+        dEde = (self.e / deltae).v - e_shift
+        dEde_bin = np.linspace(-2, 2, Bin)
+        width = dEde_bin[1] - dEde_bin[0]
+        dm_de_binned = np.array([
+            dm_de[abs(dEde - dEde_bin[i]) < width / 2].mean() for i in range(Bin)])
+
+        # binned
+        ax.scatter(dEde_bin,
+                   dm_de_binned,
                    # linestyle=linestyle,
-                   s=1,
+                   s=10,
                    color=color,
-                   alpha=0.5)
-        ax.plot(dEde_spline,
-                s_dm_de_spline,
-                linewidth=3,
-                # linestyle=linestyle,
-                color=color,
-                label=self.label)
-        # ax.plot(self.e / deltae, self.dm_de, alpha=0.2, color=color)
+                   alpha=0.8)
+
+        # smooth
+        '''arg = np.argwhere(dm_de_binned > 1e-2).flatten()
+                                dEde_spline, s_dm_de_spline = smooth(
+                                    dEde_bin[arg[0] - 1:arg[-1] +
+                                             1], dm_de_binned[arg[0] - 1:arg[-1] + 1],
+                                    n=25,
+                                    NUM_X_PER_INTERVAL=1000,
+                                    log=False)
+                                ax.plot(dEde_spline,
+                                        s_dm_de_spline,
+                                        linewidth=3,
+                                        # linestyle=linestyle,
+                                        color=color,
+                                        label=self.label)'''
+
+        # original
+        ax.plot(dEde, dm_de, alpha=0.2, color=color)
         ax.set_yscale('log')
         ax.set_xlabel(r'$E/\delta E$', fontsize=25)
-        ax.set_ylabel(r'd$M$/d$E$ ($M_\odot/\delta E$)', fontsize=25)
+        ax.set_ylabel(
+            r'$\mathrm dM$/$\mathrm dE$ ($M_\odot/\delta E$)', fontsize=25)
         ax.tick_params(labelsize=20)
 
     def Mdot_t(self, ax, Flux=False, norm=False, normfactor=1, Bin=1000, N=30,
