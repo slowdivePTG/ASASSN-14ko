@@ -49,6 +49,7 @@ class TDE:
         dmde_dE = dmde0 * deltaE
 
         self.M = q * u.Msun
+        self.dM_Ms = (dmde0[1:] * (E[1:] - E[:-1])).sum() * 2 / ms
         self.Ecc = Ecc
         self.beta = beta
         self.rT = (self.M / ms)**(1 / 3) * rs
