@@ -158,3 +158,11 @@ data/
 mosfit*/
 MESA_profiles/
 Payne+20/*ipynb
+
+Visualization/Sink\ Evolution.ipynb
+Visualization/Energy\ Dispersion\ (Density).ipynb
+Visualization/Color\ Evolution.ipynb
+TDE_Analytical/Eccentric\ orbit.ipynb
+TDE_Analytical/Polytrope.ipynb
+TDE_Analytical/Fallback_rate.ipynb
+TDE_Analytical/*png
